@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
+import logo from '/images/logo-lg.png';
+import logoo from '/images/logo.png';
 
 export default function Register() {
     const [email, setEmail] = useState('');
@@ -33,19 +35,23 @@ export default function Register() {
     return (
         <>
         <div className="min-h-screen flex flex-col">
-            {/* 상단 네비게이션 바 */}
             <nav className="flex items-center p-4 bg-gray-100">
                 <Image 
-                    src="/images/logo-lg.png" 
+                    src={logo}
                     alt="Logo" 
-                    width={40} // Specify the width of the image
-                    height={40} // Specify the height of the image
-                    className="h-10 mr-3" 
+                    width={172}
+                    height={30}
+                    className="ml-[150px]" 
                 />
-                <h2 className="text-xl font-semibold">My Application</h2>
+                <p className="ml-[1000px] cursor-pointer">로그인</p>
+                <p className="ml-[30px] cursor-pointer">회원가입</p>
             </nav>
+
         </div>
-        <div>
+
+
+        
+        <div className="text-center justify-center mb-[300px] lg:w-[1920]x] lg:h-[200px]">
             <h1>Register</h1>
             <form onSubmit={handleSubmit}>
                 <input

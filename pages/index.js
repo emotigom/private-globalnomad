@@ -1,118 +1,228 @@
-import Image from "next/image";
-import { Inter } from "next/font/google";
+import { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import navlogo from '/images/logo-lg.png';
+import largelogo from '../images/logo2.png';
+import logoo from '/images/logo.png';
+import visible from '../images/visible.svg';
+import invisible from '../images/invisible.svg';
+import SimpleModal from '../components/SimpleModal';
+import google from '../images/google.png';
+import kakao from '../images/kakao.png';
 
-const inter = Inter({ subsets: ["latin"] });
+export default function Register() {
+    const [email, setEmail] = useState('');
+    const [nickname, setNickname] = useState('');
+    const [password, setPassword] = useState('');
+    const [emailError, setEmailError] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [modalMessage, setModalMessage] = useState('');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [passwordVisibility, setPasswordVisibility] = useState({ password: false });
+    const [success, setSuccess] = useState(false);
 
-export default function Home() {
-  return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
-    >
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">pages/index.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    const onChangeEmail = (e) => {
+        setEmail(e.target.value);
+        setEmailError('');
+    };
 
-      <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-full sm:before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-full sm:after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+    const onChangePassword = (e) => {
+        setPassword(e.target.value);
+        setPasswordError('');
+    };
 
-      <div className="mb-32 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Docs{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Find in-depth information about Next.js features and API.
-          </p>
-        </a>
+    const onBlur = (e) => {
+        const { name, value } = e.target;
+    
+        if (name === 'email') {
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            setEmailError(
+                !emailPattern.test(value) ? '이메일 형식으로 작성해 주세요.' : '',
+            );
+            }
+        
+            if (name === 'password') {
+            setPasswordError(value.length < 8 ? '8자 이상 입력해 주세요.' : '');
+            }
+        };
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Learn{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Learn about Next.js in an interactive course with&nbsp;quizzes!
-          </p>
-        </a>
+    const togglePasswordVisibility = (field) => {
+        setPasswordVisibility({
+            ...passwordVisibility,
+            [field]: !passwordVisibility[field],
+        });
+    };
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Discover and deploy boilerplate example Next.js&nbsp;projects.
-          </p>
-        </a>
+    const isFormValid = email && password.length >= 8;
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{" "}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50 text-balance`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  );
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+    
+        if (!isFormValid) {
+            setEmailError('이메일과 비밀번호를 확인해 주세요.');
+            return;
+        }
+    
+        try {
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+    
+            const data = await res.json();
+            console.log('서버 응답:', data);
+    
+            if (res.ok) {
+                setSuccess(true);
+                setModalMessage('로그인이 완료되었습니다.');
+                setIsModalOpen(true);
+                localStorage.setItem('nickname', nickname);
+            } else {
+                setEmailError(data.message || '비밀번호가 일치하지 않습니다.');
+            }
+        } catch (error) {
+            console.error('API 요청 중 오류 발생:', error);
+            setEmailError('로그인 중 오류가 발생했습니다.');
+        }
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+            if (success) {
+        window.location.href = '/main';
+            }
+    };
+
+    return (
+        <>
+            <div className="flex flex-col w-[1920px] h-[70px]">
+                <nav className="flex items-center p-4 bg-[FAFBFC] border-b border-gray-300">
+                    <Image 
+                        src={navlogo}
+                        alt="Logo" 
+                        width={172}
+                        height={30}
+                        className="ml-[150px]" 
+                    />
+                    <Link href="/">
+                        <p className="ml-[1000px] cursor-pointer">로그인</p>
+                    </Link>
+                    <Link href="/signup">
+                        <p className="ml-[30px] cursor-pointer">회원가입</p>
+                    </Link>
+                </nav>
+            </div>
+            <div className="text-center justify-center w-[640px] h-[1019px] mx-auto my-[38px]">
+                <Image src={largelogo}
+                        alt="Logo" 
+                        width={340}
+                        height={192}
+                        className="ml-[150px] mb-[56px]"
+                />
+                <form onSubmit={handleSubmit} className="flex w-full flex-col gap-[20px] px-[12px]">
+                    <div className="flex flex-col gap-[16px]">
+                        <div className="text-left flex flex-col gap-[8px] pb-[28px]">
+                            <div>이메일</div>
+                            <input
+                                name="email"
+                                value={email}
+                                onBlur={onBlur}
+                                onChange={onChangeEmail}
+                                className={`px-[22px] py-[15px]  border-[1px] border-[#A4A1AA] rounded-[6px] ${emailError ? 'errorInput' : 'input'}`}
+                                placeholder="이메일을 입력해 주세요"
+                                type="email"
+                                autoComplete="email"
+                            />
+                            {emailError && <div className="text-[14px] text-[red]">{emailError}</div>}
+                        </div>
+                        <div className="text-left relative flex flex-col gap-[8px] pb-[28px]">
+                            <div>비밀번호</div>
+                            <input
+                                id="pw"
+                                name="password"
+                                value={password}
+                                onBlur={onBlur}
+                                onChange={onChangePassword}
+                                className={`px-[22px] py-[15px] border-[1px] border-[#A4A1AA] rounded-[6px] ${passwordError ? 'errorInput' : 'input'}`}
+                                placeholder="비밀번호를 입력해주세요"
+                                type={passwordVisibility.password ? 'text' : 'password'}
+                                autoComplete="password"
+                            />
+                            {passwordError && (
+                                <div className="text-[14px] text-[red]">{passwordError}</div>
+                            )}
+                            <div
+                                className="absolute right-[15px] top-[45px] cursor-pointer"
+                                onClick={() => togglePasswordVisibility('password')}
+                            >
+                                <Image
+                                    src={passwordVisibility.password ? visible : invisible}
+                                    alt={passwordVisibility.password ? 'visible' : 'invisible'}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex-col gap-[24px] flex-[center]">
+                            <button
+                                type="submit"
+                                className={isFormValid ?
+                                    'w-full h-[48px] rounded-[6px] text-lg font-medium leading-[22px] text-white bg-[#0B3B2D] rounded-lg;'
+                                    :
+                                    'w-full h-[48px] rounded-[6px] text-lg font-medium leading-[22px] text-white bg-[#9FA6B2] rounded-lg;'}
+                                disabled={!isFormValid}
+                            >
+
+                                로그인 하기
+                            </button>
+                        <div className="mt-[32px] mb-[48px]">
+                            회원이 아니신가요?{' '}
+                            <Link className="text-violet-20 underline text-[#0B3B2D]" href="/signup">
+                                회원가입하기
+                            </Link>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="flex-grow h-px bg-[#DDDDDD] mr-[37.5px]"></div>
+                            SNS 계정으로 로그인하기
+                            <div class="flex-grow h-px bg-[#DDDDDD] ml-[37.5px]"></div>
+                        </div>
+                    </div>
+                    <div className="flex flex-row w-[160px] h-[72px] m-auto mt-[20px]">
+                <Image
+                src={google}
+                alt="google-logo"
+                width={72}
+                height={72}
+                className="mr-[16px] cursor-pointer"
+                />
+                <Image
+                src={kakao}
+                alt="kakao-logo"
+                width={72}
+                height={72}
+                className="cursor-pointer"
+                />
+            </div>
+                    {modalMessage && (
+                        <SimpleModal
+                            isOpen={isModalOpen}
+                            onClose={closeModal}
+                        >
+                            <div className="">{modalMessage}</div>
+                            <button
+                                onClick={closeModal}
+                                className="absolute bottom-[28px] right-[28px] w-[120px] h-[48px] bg-[#0B3B2D] text-[#FFFFFF] rounded-[8px]"
+                            >
+                                확인
+                            </button>
+                        </SimpleModal>
+                    )}
+                </form>
+                
+            </div>
+
+        </>
+    );
 }
